@@ -6,6 +6,7 @@ from tkinter import *
 from tkinter import ttk
 
 SEPARATOR = "------------------------------------"
+INITIAL_CBOX_TEXT = "Select a window."
 
 root = Tk()
 root.title("wlock0.0")
@@ -20,8 +21,8 @@ class Main:
     def __init__(self):
         #Set up the information-storing lists.
         self.wlist = []
-        self.wtargt = ["Discord", "Telegram"]
-        self.wtargs = []
+        self.wdict = {}
+        self.wtargt = []
 
         self.getWinds()
 
@@ -35,13 +36,46 @@ class Main:
         #Selection
         self.cBoxVar = StringVar()
         self.cBox = ttk.Combobox(self.body, textvariable=self.cBoxVar, state="readonly", values=self.wlist)
-        self.cBox.set("Select a window.")
+        self.cBox.set(INITIAL_CBOX_TEXT)
         self.cBox.bind("<<ComboboxSelected>>", self.CBoxSelected)
+        
+        self.sTBox = Text(self.body)
+        self.addButton = ttk.Button(self.body, command=self.AddItem, text="Add")
+        self.remButton = ttk.Button(self.body, command=self.RemItem, text="Remove")
+        self.cleButton = ttk.Button(self.body, command=self.ClearItems, text="Clear")
 
         self.UISetup()
 
     def CBoxSelected(self,n):
-        print("Selected")
+        print("Selected: " + self.cBox.get())
+        
+    def AddItem(self):
+        procname = self.cBox.get()
+        if procname != INITIAL_CBOX_TEXT and not procname in self.wtargt:
+            self.sTBox.config(state="normal")
+            self.sTBox.insert(END, procname+"\n")
+            self.sTBox.config(state="disabled")
+
+            self.wtargt.append(procname)
+
+    def RemItem(self):
+        procname = self.cBox.get()
+        self.sTBox.config(state="normal")
+        self.sTBox.delete("1.0", END)
+        i = 0
+        for v in self.wtargt.copy():
+            if procname == v:
+                del self.wtargt[i]
+            else:
+                self.sTBox.insert(END, v+"\n")
+            i += 1
+        self.sTBox.config(state="disabled")
+
+    def ClearItems(self):
+        self.sTBox.config(state="normal")
+        self.wtargt.clear()
+        self.sTBox.delete("1.0", END)
+        self.sTBox.config(state="disabled")
 
     def UISetup(self):
         #Place UI Objects
@@ -51,6 +85,11 @@ class Main:
         self.body.place(relwidth=0.9, relheight=0.8, relx=0.5, rely=0.11, anchor="n")
 
         self.cBox.place(relwidth=0.95, relheight=0.07, relx=0.5, rely=0, anchor="n")
+        self.sTBox.place(relwidth=0.6, relheight=0.3, relx=0.025, rely=0.08, anchor="nw")
+
+        self.addButton.place(relwidth=0.32, relheight=0.09, relx=0.975, rely=0.08, anchor="ne")
+        self.remButton.place(relwidth=0.32, relheight=0.09, relx=0.975, rely=0.18, anchor="ne")
+        self.cleButton.place(relwidth=0.32, relheight=0.09, relx=0.975, rely=0.28, anchor="ne")
 
     def getFullName(self,pid):
         try:
@@ -77,23 +116,19 @@ class Main:
                 name = self.getName(fullname)
 
                 if name and len(name) > 0:
-                    self.wlist.append(name) #If so, append it into the list of all active windows.
-                    #Loop through the targets specified for window locking.
-                    for i in self.wtargt:
-                        if i.lower() in wtext.lower(): #Does the given name match the current window?
-                            #It does, add its info to the targets list.
-                            self.wtargs.append({"KEYWORD": i, "NAME": name, "PID": pid})
-                            break #Break the loop as we have gotten what we want already.
+                    self.wlist.append(name)
+                    self.wdict[name] = {"PID": pid} #If so, append it into the list of all active windows.
+
 
     def getWinds(self):
         #Clear the list of windows & lock targets.
         self.wlist.clear() 
-        self.wtargs.clear()
+        self.wdict.clear()
 
         #Use EnumWindows to loop through every process.
         win32gui.EnumWindows(self.EnumWindows,None)
 
-        return self.wlist, self.wtargs
+        return self.wlist
         
 
 m = Main()
