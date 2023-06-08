@@ -14,8 +14,18 @@ root.geometry("300x500+150+200")
 
 s = ttk.Style()
 s.configure("Header.TLabel", anchor=CENTER)
+s.configure("SetTarg.TLabel", anchor=LEFT)
 
 c = wmi.WMI()
+
+class UnderlinedLabel():
+    def __init__(self, parent, text, style="Header.TLabel", bg="#000000"):
+        self.label = ttk.Label(parent, text=text, style=style)
+        self.underline = Label(parent, bg = bg)
+    
+    def place(self, relwidth, relheight, relx, rely, anchor):
+        self.label.place(relwidth=relwidth ,relheight=relheight ,relx=relx ,rely=rely ,anchor=anchor)
+        self.underline.place(relwidth=relwidth*0.9, relheight=0.002, relx=relx, rely=rely+relheight, anchor="s")
 
 class Main:
     def __init__(self):
@@ -23,12 +33,12 @@ class Main:
         self.wlist = []
         self.wdict = {}
         self.wtargt = []
+        self.target = None
 
         self.getWinds()
 
         #Top Bar
-        self.topLabel = ttk.Label(root, text="Test", style="Header.TLabel")
-        self.topBar = Label(root, bg="#000000")
+        self.topLabel = UnderlinedLabel(root, "wlock 0.0")
        
         #Body
         self.body = ttk.Frame(root)
@@ -39,15 +49,30 @@ class Main:
         self.cBox.set(INITIAL_CBOX_TEXT)
         self.cBox.bind("<<ComboboxSelected>>", self.CBoxSelected)
         
-        self.sTBox = Text(self.body)
-        self.addButton = ttk.Button(self.body, command=self.AddItem, text="Add")
-        self.remButton = ttk.Button(self.body, command=self.RemItem, text="Remove")
-        self.cleButton = ttk.Button(self.body, command=self.ClearItems, text="Clear")
+        self.targLabel = ttk.Label(self.body, text="Target: None", style="SetTarg.TLabel")
+        self.targLabel.bind('<Configure>', lambda e: self.targLabel.config(wraplength=self.targLabel.winfo_width()))
+        self.setButton = ttk.Button(self.body, command=self.SetTarget, text="Set Target")
+
+        #Whitelist
+        self.whitelist = ttk.Frame(self.body)
+        self.wlLabel = UnderlinedLabel(root, "Whitelist")
+
+        self.sTBox = Text(self.whitelist)
+        self.sTBox.config(state="disabled")
+        self.addButton = ttk.Button(self.whitelist, command=self.AddItem, text="Add")
+        self.remButton = ttk.Button(self.whitelist, command=self.RemItem, text="Remove")
+        self.cleButton = ttk.Button(self.whitelist, command=self.ClearItems, text="Clear")
 
         self.UISetup()
 
     def CBoxSelected(self,n):
         print("Selected: " + self.cBox.get())
+
+    def SetTarget(self):
+        procname = self.cBox.get()
+        if procname != INITIAL_CBOX_TEXT:
+            self.target = procname
+            self.targLabel.configure(text="Target: " + procname)
         
     def AddItem(self):
         procname = self.cBox.get()
@@ -79,17 +104,22 @@ class Main:
 
     def UISetup(self):
         #Place UI Objects
-        self.topBar.place(relwidth=0.8, relheight=0.002, relx=0.5, rely=0.1, anchor="s")
-        self.topLabel.place(relwidth=1, relheight=0.1, relx=0.5, rely=0, anchor="n")
+        self.topLabel.place(relwidth=1, relheight=0.08, relx=0.5, rely=0, anchor="n")
 
         self.body.place(relwidth=0.9, relheight=0.8, relx=0.5, rely=0.11, anchor="n")
 
         self.cBox.place(relwidth=0.95, relheight=0.07, relx=0.5, rely=0, anchor="n")
-        self.sTBox.place(relwidth=0.6, relheight=0.3, relx=0.025, rely=0.08, anchor="nw")
+        self.targLabel.place(relwidth=0.95, relheight=0.08, relx=0.5, rely=0.09, anchor="n")
+        self.setButton.place(relwidth=0.95, relheight=0.08, relx=0.5, rely=0.19, anchor="n")
 
-        self.addButton.place(relwidth=0.32, relheight=0.09, relx=0.975, rely=0.08, anchor="ne")
-        self.remButton.place(relwidth=0.32, relheight=0.09, relx=0.975, rely=0.18, anchor="ne")
-        self.cleButton.place(relwidth=0.32, relheight=0.09, relx=0.975, rely=0.28, anchor="ne")
+        self.whitelist.place(relwidth=0.95, relheight=0.3, relx=0.5, rely=0.42, anchor="n")
+        self.wlLabel.place(relwidth=1, relheight=0.06, relx=0.5, rely=0.35, anchor="n") 
+    
+        self.sTBox.place(relwidth=0.65, relheight=1, relx=0, rely=0, anchor="nw")
+
+        self.addButton.place(relwidth=0.32, relheight=0.32, relx=0.975, rely=0, anchor="ne")
+        self.remButton.place(relwidth=0.32, relheight=0.32, relx=0.975, rely=1/3, anchor="ne")
+        self.cleButton.place(relwidth=0.32, relheight=0.32, relx=0.975, rely=2/3, anchor="ne")
 
     def getFullName(self,pid):
         try:
