@@ -50,7 +50,7 @@ class Main:
         self.cBox.bind("<<ComboboxSelected>>", self.CBoxSelected)
         
         self.targLabel = ttk.Label(self.body, text="Target: None", style="SetTarg.TLabel")
-        self.targLabel.bind('<Configure>', lambda e: self.targLabel.config(wraplength=self.targLabel.winfo_width()))
+        self.targLabel.bind('<Configure>', lambda: self.targLabel.config(wraplength=self.targLabel.winfo_width()))
         self.setButton = ttk.Button(self.body, command=self.SetTarget, text="Set Target")
 
         #Whitelist
@@ -63,7 +63,14 @@ class Main:
         self.remButton = ttk.Button(self.whitelist, command=self.RemItem, text="Remove")
         self.cleButton = ttk.Button(self.whitelist, command=self.ClearItems, text="Clear")
 
+        #Force
+        self.forceButton = ttk.Button(self.body, command=lambda: self.Force(self.wdict[self.target]["PID"]), text="Force")
+
         self.UISetup()
+    
+    def Force(self,pid):
+        app = Application().connect(process=pid)
+        app.top_window().set_focus()
 
     def CBoxSelected(self,n):
         print("Selected: " + self.cBox.get())
@@ -120,6 +127,8 @@ class Main:
         self.addButton.place(relwidth=0.32, relheight=0.32, relx=0.975, rely=0, anchor="ne")
         self.remButton.place(relwidth=0.32, relheight=0.32, relx=0.975, rely=1/3, anchor="ne")
         self.cleButton.place(relwidth=0.32, relheight=0.32, relx=0.975, rely=2/3, anchor="ne")
+
+        self.forceButton.place(relwidth=0.32, relheight=0.08, relx=0.5, rely=0.8, anchor="n")
 
     def getFullName(self,pid):
         try:
