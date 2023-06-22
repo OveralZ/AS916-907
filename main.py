@@ -1,9 +1,9 @@
 #Libraries Setup
 from pywinauto import Application
-import win32process, win32gui, win32con, time, win32api, wmi
+import win32process, win32gui, win32con, time, win32api, wmi, keyboard
 
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 
 SEPARATOR = "------------------------------------"
 INITIAL_CBOX_TEXT = "Select a window."
@@ -33,9 +33,12 @@ class Main:
         self.wlist = []
         self.wdict = {}
         self.wtargt = []
+        self.timer = 10
         self.target = None
 
         self.getWinds()
+
+        keyboard.on_press_key("p", lambda e: print("p pressed"))
 
         #Top Bar
         self.topLabel = UnderlinedLabel(root, "wlock 0.0")
@@ -50,7 +53,7 @@ class Main:
         self.cBox.bind("<<ComboboxSelected>>", self.CBoxSelected)
         
         self.targLabel = ttk.Label(self.body, text="Target: None", style="SetTarg.TLabel")
-        self.targLabel.bind('<Configure>', lambda: self.targLabel.config(wraplength=self.targLabel.winfo_width()))
+        self.targLabel.bind('<Configure>', lambda e: self.targLabel.config(wraplength=self.targLabel.winfo_width()))
         self.setButton = ttk.Button(self.body, command=self.SetTarget, text="Set Target")
 
         #Whitelist
@@ -63,14 +66,50 @@ class Main:
         self.remButton = ttk.Button(self.whitelist, command=self.RemItem, text="Remove")
         self.cleButton = ttk.Button(self.whitelist, command=self.ClearItems, text="Clear")
 
+        #Timer
+        self.timerLabel = UnderlinedLabel(root, "Timer")
+        self.timerFrame = ttk.Frame(self.body)
+        self.timerEntry = Entry(self.timerFrame)
+        self.timerCVar = StringVar()
+        self.timerOption = ttk.Combobox(self.timerFrame, textvariable=self.timerCVar, state="readonly", values=["Seconds", "Minutes", "Hours"])
+        self.timerOption.set("Seconds")
+
         #Force
-        self.forceButton = ttk.Button(self.body, command=lambda: self.Force(self.wdict[self.target]["PID"]), text="Force")
+        self.forceButton = ttk.Button(self.body, command=self.Force, text="Force")
 
         self.UISetup()
     
-    def Force(self,pid):
+    def Force(self):
+        try:
+            pid = self.wdict[self.target]["PID"]
+        except: 
+            messagebox.showerror(title="Error", message="You have not set a target!")
+            return
+        try:
+            mode = self.timerOption.get()
+            timer = float(self.timerEntry.get())
+            if mode == "Minutes": timer *= 60 
+            elif mode == "Hours": timer *= 360
+        except:
+            messagebox.showerror(title="Error", message="The timer entry is not a valid number!")
+
+        st = time.time()
         app = Application().connect(process=pid)
         app.top_window().set_focus()
+
+        while True:
+            try:
+                hwnd = win32gui.GetForegroundWindow()
+                _, npid = win32process.GetWindowThreadProcessId(hwnd)
+                if npid != pid:
+                    app.top_window().set_focus()
+                time.sleep(0.1)
+                if time.time() - st > timer:
+                    break
+            except Exception as e:
+                print(e)
+                pass
+        messagebox.showinfo(title="Alert", message="Focus timer complete.")
 
     def CBoxSelected(self,n):
         print("Selected: " + self.cBox.get())
@@ -111,16 +150,16 @@ class Main:
 
     def UISetup(self):
         #Place UI Objects
-        self.topLabel.place(relwidth=1, relheight=0.08, relx=0.5, rely=0, anchor="n")
+        self.topLabel.place(relwidth=1, relheight=0.06, relx=0.5, rely=0, anchor="n")
 
-        self.body.place(relwidth=0.9, relheight=0.8, relx=0.5, rely=0.11, anchor="n")
+        self.body.place(relwidth=0.9, relheight=0.9, relx=0.5, rely=0.08, anchor="n")
 
         self.cBox.place(relwidth=0.95, relheight=0.07, relx=0.5, rely=0, anchor="n")
-        self.targLabel.place(relwidth=0.95, relheight=0.08, relx=0.5, rely=0.09, anchor="n")
-        self.setButton.place(relwidth=0.95, relheight=0.08, relx=0.5, rely=0.19, anchor="n")
+        self.targLabel.place(relwidth=0.95, relheight=0.06, relx=0.5, rely=0.09, anchor="n")
+        self.setButton.place(relwidth=0.95, relheight=0.08, relx=0.5, rely=0.17, anchor="n")
 
-        self.whitelist.place(relwidth=0.95, relheight=0.3, relx=0.5, rely=0.42, anchor="n")
-        self.wlLabel.place(relwidth=1, relheight=0.06, relx=0.5, rely=0.35, anchor="n") 
+        self.whitelist.place(relwidth=0.95, relheight=0.3, relx=0.5, rely=0.37, anchor="n")
+        self.wlLabel.place(relwidth=1, relheight=0.06, relx=0.5, rely=0.32, anchor="n") 
     
         self.sTBox.place(relwidth=0.65, relheight=1, relx=0, rely=0, anchor="nw")
 
@@ -128,7 +167,12 @@ class Main:
         self.remButton.place(relwidth=0.32, relheight=0.32, relx=0.975, rely=1/3, anchor="ne")
         self.cleButton.place(relwidth=0.32, relheight=0.32, relx=0.975, rely=2/3, anchor="ne")
 
-        self.forceButton.place(relwidth=0.32, relheight=0.08, relx=0.5, rely=0.8, anchor="n")
+        self.timerLabel.place(relwidth=1, relheight=0.06, relx=0.5, rely=0.7, anchor="n")
+        self.timerFrame.place(relwidth=1, relheight=0.06, relx=0.5, rely=0.78, anchor="n")
+        self.timerEntry.place(relwidth=0.7, relheight=1, relx=0, rely=0, anchor="nw")
+        self.timerOption.place(relwidth=0.3, relheight=1, relx=1, rely=0, anchor="ne")
+
+        self.forceButton.place(relwidth=0.32, relheight=0.08, relx=0.5, rely=0.98, anchor="s")
 
     def getFullName(self,pid):
         try:
@@ -146,7 +190,7 @@ class Main:
             return None
     
     def EnumWindows(self,hwnd,ctx):
-        if win32gui.IsWindowVisible(hwnd): #Check if window is visible on the screen.
+        if win32gui.IsWindowVisible(hwnd) and not win32gui.IsIconic(hwnd): #Check if window is visible on the screen.
             wtext = win32gui.GetWindowText(hwnd)
             if len(wtext) > 0:
                 _, pid = win32process.GetWindowThreadProcessId(hwnd)
