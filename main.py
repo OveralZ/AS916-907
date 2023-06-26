@@ -7,10 +7,12 @@ from tkinter import ttk, messagebox
 
 SEPARATOR = "------------------------------------"
 INITIAL_CBOX_TEXT = "Select a window."
+TITLE = "wlock0.0"
+SIZE = "300x500+150+200"
 
 root = Tk()
-root.title("wlock0.0")
-root.geometry("300x500+150+200")
+root.title(TITLE)
+root.geometry(SIZE)
 
 s = ttk.Style()
 s.configure("Header.TLabel", anchor=CENTER)
@@ -96,6 +98,7 @@ class Main:
         st = time.time()
         app = Application().connect(process=pid)
         app.top_window().set_focus()
+        root.title("Focusing..")
 
         while True:
             try:
@@ -110,6 +113,7 @@ class Main:
                 print(e)
                 pass
         messagebox.showinfo(title="Alert", message="Focus timer complete.")
+        root.title(TITLE)
 
     def CBoxSelected(self,n):
         print("Selected: " + self.cBox.get())
