@@ -94,9 +94,14 @@ class Main:
             elif mode == "Hours": timer *= 360
         except:
             messagebox.showerror(title="Error", message="The timer entry is not a valid number!")
+            return
 
         st = time.time()
-        app = Application().connect(process=pid)
+        try: 
+            app = Application().connect(process=pid) 
+        except: 
+            messagebox.showerror(title="Alert", message="Application not found, try refreshing the available windows under 'File'.")
+            return
         app.top_window().set_focus()
         root.title("Focusing..")
 
@@ -194,7 +199,7 @@ class Main:
             return None
     
     def EnumWindows(self,hwnd,ctx):
-        if win32gui.IsWindowVisible(hwnd) and not win32gui.IsIconic(hwnd): #Check if window is visible on the screen.
+        if win32gui.IsWindowVisible(hwnd): #Check if window is visible on the screen.
             wtext = win32gui.GetWindowText(hwnd)
             if len(wtext) > 0:
                 _, pid = win32process.GetWindowThreadProcessId(hwnd)
@@ -214,10 +219,19 @@ class Main:
 
         #Use EnumWindows to loop through every process.
         win32gui.EnumWindows(self.EnumWindows,None)
+        try: self.cBox.configure(values=self.wlist) 
+        except: pass
 
         return self.wlist
         
 
 m = Main()
+
+menubar = Menu(root)
+filemenu = Menu(menubar, tearoff=0)
+filemenu.add_command(label="Refresh", command=m.getWinds)
+menubar.add_cascade(label="File", menu=filemenu)
+
+root.configure(menu=menubar)
 
 root.mainloop()
