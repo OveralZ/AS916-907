@@ -1,9 +1,9 @@
 #Libraries Setup
 from pywinauto import Application
-import win32process, win32gui, win32con, time, win32api, wmi, keyboard
+import win32process, win32gui, win32con, time, win32api, wmi, keyboard, json
 
 from tkinter import *
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
 
 SEPARATOR = "------------------------------------"
 INITIAL_CBOX_TEXT = "Select a window."
@@ -29,12 +29,26 @@ class UnderlinedLabel():
         self.label.place(relwidth=relwidth ,relheight=relheight ,relx=relx ,rely=rely ,anchor=anchor)
         self.underline.place(relwidth=relwidth*0.9, relheight=0.002, relx=relx, rely=rely+relheight, anchor="s")
 
+class SettingsMenu():
+    def __init__(self, menu):
+        self.Menu = menu
+        self.Root = Tk()
+        self.Root.title("Settings")
+        self.Root.geometry("300x300")
+
+        self.Root.protocol("WM_DELETE_WINDOW", self.closed)
+
+    def closed(self):
+        self.Root.destroy()
+        self.Menu.settingsClosed()
+
 class Main:
     def __init__(self):
         #Set up the information-storing lists.
         self.wlist = []
         self.wdict = {}
         self.wtargt = []
+        self.wpids = []
         self.timer = 10
         self.target = None
 
@@ -79,7 +93,57 @@ class Main:
         #Force
         self.forceButton = ttk.Button(self.body, command=self.Force, text="Force")
 
+        #Menus
+        self.menubar = Menu(root)
+        self.filemenu = Menu(self.menubar, tearoff=0)
+
+        self.filemenu.add_command(label="Refresh", command=self.getWinds)
+        self.filemenu.add_command(label="Save", command=self.savePreset)
+        self.filemenu.add_command(label="Load", command=self.loadPreset)
+        self.filemenu.add_command(label="Settings", command=self.settingsDisplay)
+        self.settingsActive = False
+       
+        self.menubar.add_cascade(label="File", menu=self.filemenu)
+
         self.UISetup()
+
+    def settingsClosed(self):
+        self.settingsActive = False
+
+    def settingsDisplay(self):
+        if self.settingsActive == False:
+            self.settingsMenu = SettingsMenu(self)
+        self.settingsActive = not self.settingsActive
+        self.settingsMenu.Root.mainloop()
+
+    def onClose(self):
+        try:
+            self.settingsMenu.Root.destroy()
+        except:
+            pass
+        root.destroy()
+
+    def savePreset(self):
+        fp = filedialog.asksaveasfilename(filetypes={("Preset files", "*.wlpreset")})
+        fp = fp.replace(".wlpreset", "")
+        if fp:
+            save = open(fp + ".wlpreset","w+")
+            json.dump({
+                "Target": self.target, "Timer": float(self.timerEntry.get() or 10), "Whitelist": self.wtargt, "TimerSetting": self.timerOption.get()
+            },save)
+            save.close()
+    
+    def loadPreset(self):
+        fp = filedialog.askopenfilename(filetypes={("Preset files", "*.wlpreset")})
+        save = open(fp,"r")
+        tab = json.load(save)
+        
+        self.getWinds()
+        for i in tab:
+            v = tab[i]
+            print(i, v)
+
+        save.close()
     
     def Force(self):
         try:
@@ -110,7 +174,8 @@ class Main:
                 hwnd = win32gui.GetForegroundWindow()
                 _, npid = win32process.GetWindowThreadProcessId(hwnd)
                 if npid != pid:
-                    app.top_window().set_focus()
+                    if not npid in self.wpids:
+                        app.top_window().set_focus()
                 time.sleep(0.1)
                 if time.time() - st > timer:
                     break
@@ -136,6 +201,7 @@ class Main:
             self.sTBox.insert(END, procname+"\n")
             self.sTBox.config(state="disabled")
 
+            self.wpids.append(self.wdict[procname]["PID"])
             self.wtargt.append(procname)
 
     def RemItem(self):
@@ -149,6 +215,15 @@ class Main:
             else:
                 self.sTBox.insert(END, v+"\n")
             i += 1
+
+        i2 = 0
+        for i in self.wpids:
+            if i == self.wdict[procname]["PID"]:
+                del self.wpids[i2]
+            i2 += 1
+        
+        print(self.wpids)
+
         self.sTBox.config(state="disabled")
 
     def ClearItems(self):
@@ -227,11 +302,6 @@ class Main:
 
 m = Main()
 
-menubar = Menu(root)
-filemenu = Menu(menubar, tearoff=0)
-filemenu.add_command(label="Refresh", command=m.getWinds)
-menubar.add_cascade(label="File", menu=filemenu)
-
-root.configure(menu=menubar)
-
+root.configure(menu=m.menubar)
+root.protocol("WM_DELETE_WINDOW", m.onClose)
 root.mainloop()
