@@ -78,7 +78,7 @@ class Main:
 
         self.sTBox = Text(self.whitelist)
         self.sTBox.config(state="disabled")
-        self.addButton = ttk.Button(self.whitelist, command=self.AddItem, text="Add")
+        self.addButton = ttk.Button(self.whitelist, command=lambda: self.AddItem(None), text="Add")
         self.remButton = ttk.Button(self.whitelist, command=self.RemItem, text="Remove")
         self.cleButton = ttk.Button(self.whitelist, command=self.ClearItems, text="Clear")
 
@@ -139,9 +139,19 @@ class Main:
         tab = json.load(save)
         
         self.getWinds()
-        for i in tab:
-            v = tab[i]
-            print(i, v)
+
+        self.timerEntry.delete(0, END)
+        self.timerEntry.insert(0, str(tab["Timer"]))
+        self.timerOption.set(tab["TimerSetting"])
+
+        if self.wdict[tab["Target"]]:
+            n = tab["Target"]
+            self.targLabel.configure(text="Target: " + n)
+            self.target = n
+        
+        for i in tab["Whitelist"]:
+            if self.wdict[i]:
+                self.AddItem(i)
 
         save.close()
     
@@ -172,15 +182,21 @@ class Main:
         while True:
             try:
                 hwnd = win32gui.GetForegroundWindow()
+                hn = win32gui.GetWindowText(hwnd)
+                
                 _, npid = win32process.GetWindowThreadProcessId(hwnd)
-                if npid != pid:
-                    if not npid in self.wpids:
-                        app.top_window().set_focus()
+                fullname = self.getFullName(npid)
+                name = self.getName(fullname)
+
+                if hn and (not name == "Windows Explorer"):
+                    if npid != pid:
+                        if not npid in self.wpids:
+                            app.top_window().set_focus()
                 time.sleep(0.1)
                 if time.time() - st > timer:
                     break
             except Exception as e:
-                print(e)
+                time.sleep(0.1)
                 pass
         messagebox.showinfo(title="Alert", message="Focus timer complete.")
         root.title(TITLE)
@@ -194,8 +210,8 @@ class Main:
             self.target = procname
             self.targLabel.configure(text="Target: " + procname)
         
-    def AddItem(self):
-        procname = self.cBox.get()
+    def AddItem(self, opt):
+        procname = opt or self.cBox.get()
         if procname != INITIAL_CBOX_TEXT and not procname in self.wtargt:
             self.sTBox.config(state="normal")
             self.sTBox.insert(END, procname+"\n")
@@ -221,14 +237,13 @@ class Main:
             if i == self.wdict[procname]["PID"]:
                 del self.wpids[i2]
             i2 += 1
-        
-        print(self.wpids)
 
         self.sTBox.config(state="disabled")
 
     def ClearItems(self):
         self.sTBox.config(state="normal")
         self.wtargt.clear()
+        self.wpids.clear()
         self.sTBox.delete("1.0", END)
         self.sTBox.config(state="disabled")
 
@@ -291,6 +306,7 @@ class Main:
         #Clear the list of windows & lock targets.
         self.wlist.clear() 
         self.wdict.clear()
+        self.wpids.clear()
 
         #Use EnumWindows to loop through every process.
         win32gui.EnumWindows(self.EnumWindows,None)
