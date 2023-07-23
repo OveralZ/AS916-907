@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-07-19T00:51:42.468Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" etag="ky80oaRIWeUZ26Ly2Xar" version="21.6.2" type="github">
+<mxfile host="app.diagrams.net" modified="2023-07-23T22:07:39.136Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" etag="JnyXlm6263Z0mnCAtSAb" version="21.6.3" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="1050" dy="581" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -10,132 +10,32 @@
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-3" value="&quot;File&quot; menu pressed" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="10" y="10" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-0" target="8Y9zRXYFYlGtQ__-cN-j-4" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-0" target="8Y9zRXYFYlGtQ__-cN-j-13" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-0" target="8Y9zRXYFYlGtQ__-cN-j-24" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="70" y="270" as="sourcePoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.623;entryDx=0;entryDy=0;entryPerimeter=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-0" target="8Y9zRXYFYlGtQ__-cN-j-46" edge="1">
+        <mxCell id="DRZI_vVV0VJuEr6TvP-B-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-0" target="8Y9zRXYFYlGtQ__-cN-j-46">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-0" value="Display file menu." style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="10" y="80" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-4" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="330" y="110" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-4" value="&quot;Refresh&quot; pressed." style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="170" y="80" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-7" value="Reiterate through all active windows and update the list of windows." style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="330" y="80" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-13" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="330" y="190" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-13" value="&quot;Save&quot; pressed." style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="170" y="160" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-17" target="8Y9zRXYFYlGtQ__-cN-j-19" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-17" value="Save the timer, current target, and the list of whitelisted windows into a dictionary." style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="330" y="160" width="150" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-19" value="Save this dictionary to a JSON file." style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="520" y="170" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-21" value="The PID of windows are different every time, so we have to account for that by saving the names of the windows instead, to identify them in the future." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="510" y="90" width="300" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-22" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/png,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;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="810" y="101.14" width="129" height="38.86" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-24" target="8Y9zRXYFYlGtQ__-cN-j-27" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-24" value="&quot;Load&quot; pressed." style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="170" y="260" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-27" target="8Y9zRXYFYlGtQ__-cN-j-29" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-27" value="Use filedialog to ask for a file." style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="330" y="260" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-29" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="710" y="290" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-29" target="8Y9zRXYFYlGtQ__-cN-j-37" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-29" value="Is the selected file a .wlpreset file?" style="rhombus;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="490" y="250" width="150" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-32" value="No" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="640" y="260" width="60" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-34" value="Nothing happens." style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="710" y="260" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-37" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="890" y="370" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-43" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-37" target="8Y9zRXYFYlGtQ__-cN-j-42" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-37" value="Refresh, clear whitelist, then Iterate through the current list of active windows." style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="710" y="340" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-45" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-40" target="8Y9zRXYFYlGtQ__-cN-j-44" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-40" value="If this window&#39;s name matches one in the preset file, add it to the whitelist." style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="890" y="340" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-41" value="Yes" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="600" y="340" width="60" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-42" value="Set the timer to the timer specified in the preset file.&amp;nbsp;" style="whiteSpace=wrap;html=1;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="710" y="440" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="8Y9zRXYFYlGtQ__-cN-j-44" value="Set the target window to the target specified in the preset file if it exists. If not, display an alert." style="whiteSpace=wrap;html=1;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="880" y="440" width="140" height="80" as="geometry" />
-        </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-57" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-46" target="8Y9zRXYFYlGtQ__-cN-j-56" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-46" value="&quot;Settings&quot; pressed." style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="170" y="350" width="120" height="60" as="geometry" />
+          <mxGeometry x="180" y="10" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-60" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-56" target="8Y9zRXYFYlGtQ__-cN-j-59" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="s6qUDriCIRXyP7X68EHP-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-56">
+        <mxCell id="s6qUDriCIRXyP7X68EHP-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-56" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="230" y="440" as="targetPoint" />
+            <mxPoint x="240" y="100" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="390" y="420" />
-              <mxPoint x="231" y="420" />
+              <mxPoint x="400" y="80" />
+              <mxPoint x="241" y="80" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-56" value="Open another GUI in a different window." style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="330" y="350" width="120" height="60" as="geometry" />
+          <mxGeometry x="340" y="10" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-62" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-59" target="8Y9zRXYFYlGtQ__-cN-j-61" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -143,45 +43,48 @@
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-69" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-59" target="8Y9zRXYFYlGtQ__-cN-j-68" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="390" y="420" />
-              <mxPoint x="540" y="420" />
+              <mxPoint x="400" y="80" />
+              <mxPoint x="550" y="80" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-59" value="Display an array of hotkeys, alongside with buttons." style="whiteSpace=wrap;html=1;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="330" y="440" width="120" height="60" as="geometry" />
+          <mxGeometry x="340" y="100" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-65" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-61" target="8Y9zRXYFYlGtQ__-cN-j-64" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-61" value="Button pressed for a corresponding hotkey." style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="330" y="530" width="120" height="60" as="geometry" />
+          <mxGeometry x="340" y="190" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-66" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-64" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="390" y="710" as="targetPoint" />
+            <mxPoint x="400" y="370" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-64" value="Display another GUI, ask for user input." style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="330" y="620" width="120" height="60" as="geometry" />
+          <mxGeometry x="340" y="280" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-67" value="Retrieve user input, update the hotkey&#39;s display." style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="330" y="710" width="120" height="60" as="geometry" />
+          <mxGeometry x="340" y="370" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="8Y9zRXYFYlGtQ__-cN-j-68" target="8Y9zRXYFYlGtQ__-cN-j-70" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-68" value="Button pressed for &quot;apply&quot;." style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="480" y="440" width="120" height="60" as="geometry" />
+          <mxGeometry x="490" y="100" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-70" value="Save the settings in a JSON file, which will be read on startup." style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="480" y="530" width="120" height="60" as="geometry" />
+          <mxGeometry x="490" y="190" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="8Y9zRXYFYlGtQ__-cN-j-72" value="As for the hotkeys, there will be one for starting/stopping the program&#39;s force function, and one for pausing/resuming the timer." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="465" y="610" width="150" height="160" as="geometry" />
+          <mxGeometry x="475" y="270" width="150" height="160" as="geometry" />
         </mxCell>
-        <mxCell id="s6qUDriCIRXyP7X68EHP-8" value="Also display a list of togglable settings." style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="170" y="440" width="120" height="60" as="geometry" />
+        <mxCell id="s6qUDriCIRXyP7X68EHP-8" value="Also display a list of togglable settings." style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="180" y="100" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DRZI_vVV0VJuEr6TvP-B-2" value="^ Includes all the stakeholder&#39;s suggestions." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="160" y="170" width="160" height="50" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
