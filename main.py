@@ -118,23 +118,27 @@ class SettingsMenu():
 
     def closed(self): #Callback for when the settings GUI is closed.
         self.root.destroy()
+        try:
+            self.nroot.destroy()
+        except Exception as e: print(e)
         self.menu.settingsClosed()
 
     def toggleSetting(self,val): #Function for toggling a setting.
         self.settings[val] = not self.settings[val]
 
     def adjustHotkey(self, i): #Hotkey change function.
-        nroot = Tk() #Create the new GUI.
-        nroot.iconbitmap(ICON)
-        nroot.geometry("300x80") 
-        label = ttk.Label(nroot, text="Press any key..", anchor=CENTER) #Create the label.
+        self.nroot = Tk() #Create the new GUI.
+        self.nroot.iconbitmap(ICON)
+        self.nroot.geometry("300x80") 
+        self.nroot.title("Hotkeys")
+        label = ttk.Label(self.nroot, text="Press any key..", anchor=CENTER) #Create the label.
         label.place(relheight=1,relwidth=1,relx=0,rely=0,anchor="nw")
-        threading.Thread(target=lambda: self.hkeyWait(i, nroot)).start() #Call a new thread so the window does not count as frozen.
-        nroot.mainloop() #Call mainloop so the window remains.
+        threading.Thread(target=lambda: self.hkeyWait(i)).start() #Call a new thread so the window does not count as frozen.
+        self.nroot.mainloop() #Call mainloop so the window remains.
 
-    def hkeyWait(self, i, nroot):
+    def hkeyWait(self, i):
         k = keyboard.read_key() #Wait for an input from the user.
-        nroot.destroy() #Destroy the GUI.
+        self.nroot.destroy() #Destroy the GUI.
         self.hotkeyButtons[i].configure(text=k.upper())
         self.settings["Hotkeys"][i] = k #Change our settings.
 
@@ -260,6 +264,7 @@ class Main:
     def onClose(self): #Callback for when the main GUI is closed, so that we can close the other opened windows.
         try:
             self.settingsMenu.root.destroy()
+            self.settingsMenu.nroot.destroy()
         except:
             pass
         root.destroy()
