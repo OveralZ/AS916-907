@@ -11,18 +11,18 @@ If you wish to pause the program or to stop it, you can use a hotkey.
 Pausing is bound to F5 by default, while Aborting is bound to F6 by default.
 See [Hotkeys](#hotkeys) for more information.
 
-### Quality of Life
-## Presets
+## Quality of Life
+### Presets
 Under File, you will see a "Save" and a "Load" function.
 Save will save your current target, whitelist, and timer into a file.
 This file can then be loaded with Load, which will update all of your configurations.
 
-## Settings
+### Settings
 Under File, you will also see a "Settings" option.
 This option will open a new window, and you can adjust your settings there.
 Make sure to press "Apply" to save these settings.
 These settings save between usages of this program.
 
-## Hotkeys
+### Hotkeys
 In the settings GUI, you will also see a list of hotkeys.
 Press the buttons assigned to the hotkeys to assign them to another button of your choice.
