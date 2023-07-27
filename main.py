@@ -120,7 +120,7 @@ class SettingsMenu():
         self.root.destroy()
         try:
             self.nroot.destroy()
-        except Exception as e: print(e)
+        except: pass
         self.menu.settingsClosed()
 
     def toggleSetting(self,val): #Function for toggling a setting.
