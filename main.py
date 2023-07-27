@@ -1,6 +1,6 @@
 #Libraries Setup
 from pywinauto import Application
-import win32process, win32gui, win32con, time, win32api, wmi, keyboard, json, copy
+import win32process, win32gui, win32con, time, win32api, wmi, keyboard, json, copy, sys, os, threading
 
 from tkinter import *
 from tkinter import ttk, messagebox, filedialog
@@ -11,10 +11,22 @@ INITIAL_CBOX_TEXT = "Select a window."
 TITLE = "wlock0.1"
 SIZE = "300x500+150+200"
 
+def getpath(rp): #Used to get the real path of the file when in .EXE form.
+    try:
+        #PyInstaller creates a temp folder and stores path in _MEIPASS, so we use it instead.
+        bp = sys._MEIPASS
+    except Exception:
+        bp = os.path.abspath(".") #For when we are in VSCode.
+
+    return os.path.join(bp, rp)
+
+ICON = getpath("./assets/icon.ico")
+
 #Setup the root GUI.
 root = Tk()
 root.title(TITLE)
 root.geometry(SIZE)
+root.iconbitmap(ICON)
 
 #Styles for our GUI objects, mainly for text centering.
 s = ttk.Style()
@@ -58,6 +70,7 @@ class SettingsMenu():
         #Initialize the new GUI.
         self.menu = menu
         self.root = Tk()
+        self.root.iconbitmap(ICON)
         self.root.title("Settings")
         self.root.geometry("300x300")
         self.settings = copy.deepcopy(menu.settings) #Create a clone of the main settings, since we will have the ability to cancel changes.
@@ -112,10 +125,14 @@ class SettingsMenu():
 
     def adjustHotkey(self, i): #Hotkey change function.
         nroot = Tk() #Create the new GUI.
+        nroot.iconbitmap(ICON)
         nroot.geometry("300x80") 
         label = ttk.Label(nroot, text="Press any key..", anchor=CENTER) #Create the label.
         label.place(relheight=1,relwidth=1,relx=0,rely=0,anchor="nw")
-        nroot.update() #Update the GUI so it appears without yielding (we are not using mainloop).
+        threading.Thread(target=lambda: self.hkeyWait(i, nroot)).start() #Call a new thread so the window does not count as frozen.
+        nroot.mainloop() #Call mainloop so the window remains.
+
+    def hkeyWait(self, i, nroot):
         k = keyboard.read_key() #Wait for an input from the user.
         nroot.destroy() #Destroy the GUI.
         self.hotkeyButtons[i].configure(text=k.upper())
@@ -442,10 +459,16 @@ class Main:
         self.wdict.clear()
         self.wpids.clear()
 
+        loadingL = ttk.Label(root, anchor=CENTER, text="Loading.. Please wait...") #Create the loading label.
+        loadingL.place(relheight=1,relwidth=1)
+        root.update() #Update the root so the label appears.
+
         #Use EnumWindows to loop through every process.
         win32gui.EnumWindows(self.EnumWindows,None)
         try: self.cBox.configure(values=self.wlist) 
         except: pass
+
+        loadingL.destroy() #Destroy it after loading is complete.
 
         return self.wlist
         
