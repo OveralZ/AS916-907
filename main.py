@@ -1,46 +1,125 @@
 #Libraries Setup
 from pywinauto import Application
-import win32process, win32gui, win32con, time, win32api, wmi, keyboard, json
+import win32process, win32gui, win32con, time, win32api, wmi, keyboard, json, copy
 
 from tkinter import *
 from tkinter import ttk, messagebox, filedialog
 
+#Constants
 SEPARATOR = "------------------------------------"
 INITIAL_CBOX_TEXT = "Select a window."
-TITLE = "wlock0.0"
+TITLE = "wlock0.1"
 SIZE = "300x500+150+200"
 
+#Setup the root GUI.
 root = Tk()
 root.title(TITLE)
 root.geometry(SIZE)
 
+#Styles for our GUI objects, mainly for text centering.
 s = ttk.Style()
 s.configure("Header.TLabel", anchor=CENTER)
 s.configure("SetTarg.TLabel", anchor=LEFT)
 
+#Initialize WMI for later use.
 c = wmi.WMI()
 
-class UnderlinedLabel():
+class Hotkey(): #Class for a hotkey and its assigned function.
+    def __init__(self, key, function):
+        #Set up variables.
+        self.key = key
+        self.function = function
+        self.disconnected = False
+        
+        keyboard.on_press_key(key, self.func) #Create the callback for when the key is pressed.
+    
+    def func(self,n):
+        if self.disconnected == False:
+            self.function() #When the key is pressed and if the key is not disconnected, run the originally assigned function.
+        else: del self #If not, delete this class object.
+    
+    def disconnect(self):
+        self.disconnected = True #Disconnect this object.
+        del self
+
+class UnderlinedLabel(): #Class for convenience, acts as one GUI object but contains 2.
     def __init__(self, parent, text, style="Header.TLabel", bg="#000000"):
-        self.label = ttk.Label(parent, text=text, style=style)
+        #Initialize, create the 2 GUI objects.
+        self.label = ttk.Label(parent, text=text, style=style, anchor=CENTER)
         self.underline = Label(parent, bg = bg)
     
     def place(self, relwidth, relheight, relx, rely, anchor):
-        self.label.place(relwidth=relwidth ,relheight=relheight ,relx=relx ,rely=rely ,anchor=anchor)
+        #Replace the .place() function with our own.
+        self.label.place(relwidth=relwidth, relheight=relheight, relx=relx, rely=rely, anchor=anchor)
         self.underline.place(relwidth=relwidth*0.9, relheight=0.002, relx=relx, rely=rely+relheight, anchor="s")
 
 class SettingsMenu():
     def __init__(self, menu):
-        self.Menu = menu
-        self.Root = Tk()
-        self.Root.title("Settings")
-        self.Root.geometry("300x300")
+        #Initialize the new GUI.
+        self.menu = menu
+        self.root = Tk()
+        self.root.title("Settings")
+        self.root.geometry("300x300")
+        self.settings = copy.deepcopy(menu.settings) #Create a clone of the main settings, since we will have the ability to cancel changes.
 
-        self.Root.protocol("WM_DELETE_WINDOW", self.closed)
+        #Callback to window closure, since we have to tell the main program that the settings have been closed.
+        self.root.protocol("WM_DELETE_WINDOW", self.closed)
 
-    def closed(self):
-        self.Root.destroy()
-        self.Menu.settingsClosed()
+        #Top title
+        self.top = UnderlinedLabel(self.root, "Settings")
+        self.top.place(relwidth=1, relheight=0.1, relx=0.5, rely=0, anchor="n")
+
+        #Settings
+        self.whitelistToggle = Checkbutton(self.root, text="Add window to whitelist on select", onvalue=True, offvalue=False, command=lambda: self.toggleSetting("AddToWhitelistOnSelect"))
+        if self.settings["AddToWhitelistOnSelect"] == True: self.whitelistToggle.select() #Select the checkbox if the value is true.
+        self.whitelistToggle.place(relwidth=0.9, relheight=0.1, relx=0.5, rely=0.11, anchor="n")
+
+        #Hotkeys
+        i2 = 0
+        self.hk = UnderlinedLabel(self.root, "Hotkeys")
+        self.hk.place(relwidth=1, relheight=0.1, relx=0.5, rely=0.3, anchor="n")
+        self.hotkeyFrame = Frame(self.root)
+        self.hotkeyFrame.place(relwidth=0.9, relheight=0.4, relx=0.5, rely=0.41, anchor="n")
+
+        self.hotkeyButtons = {} #Setup another dictionary for the specific button objects created so we can refer to them later.
+
+        for i in self.settings["Hotkeys"]: #Loop through the settings dictionary.
+            v = self.settings["Hotkeys"][i]
+            #Create the GUI objects.
+            label = ttk.Label(self.hotkeyFrame, text=i, style="Header.TLabel", anchor=CENTER)
+            label.place(relwidth=0.4, relheight=0.25, relx=0.5, rely=0 + i2/4, anchor="ne")
+
+            btn = ttk.Button(self.hotkeyFrame, text=v.upper(), command=lambda i = i: self.adjustHotkey(i))
+            btn.place(relwidth=0.4, relheight=0.25, relx=0.5, rely=0 + i2/4, anchor="nw")
+            self.hotkeyButtons[i] = btn
+
+            i2 += 1
+
+        #Bottom UI
+        self.bFrame = Frame(self.root)
+        self.bFrame.place(relwidth=0.7, relheight=0.1, relx=0.99, rely=0.99, anchor="se")
+        self.applyButton = ttk.Button(self.bFrame, text="Apply", command=lambda: menu.changeSettings(self.settings))
+        self.applyButton.place(relwidth=0.45, relheight=1, relx=0.5, rely=0, anchor="ne")
+        self.cancelButton = ttk.Button(self.bFrame, text="Cancel", command=self.closed)
+        self.cancelButton.place(relwidth=0.45, relheight=1, relx=1, rely=0, anchor="ne")
+
+    def closed(self): #Callback for when the settings GUI is closed.
+        self.root.destroy()
+        self.menu.settingsClosed()
+
+    def toggleSetting(self,val): #Function for toggling a setting.
+        self.settings[val] = not self.settings[val]
+
+    def adjustHotkey(self, i): #Hotkey change function.
+        nroot = Tk() #Create the new GUI.
+        nroot.geometry("300x80") 
+        label = ttk.Label(nroot, text="Press any key..", anchor=CENTER) #Create the label.
+        label.place(relheight=1,relwidth=1,relx=0,rely=0,anchor="nw")
+        nroot.update() #Update the GUI so it appears without yielding (we are not using mainloop).
+        k = keyboard.read_key() #Wait for an input from the user.
+        nroot.destroy() #Destroy the GUI.
+        self.hotkeyButtons[i].configure(text=k.upper())
+        self.settings["Hotkeys"][i] = k #Change our settings.
 
 class Main:
     def __init__(self):
@@ -51,13 +130,36 @@ class Main:
         self.wpids = []
         self.timer = 10
         self.target = None
+        self.paused = False
 
+        #Settings and setting loading.
+        self.settings = {
+            "AddToWhitelistOnSelect": False,
+            "Hotkeys": {
+                "Pause": "f5", "Abort": "f6"
+            }
+        }
+
+        try:
+            setJson = open("settings.json","r+") #Attempt to open the data in read & write form.
+            self.settings = json.load(setJson)
+        except FileNotFoundError:
+            setJson = open("settings.json","w+") #If it doesn't exist, use w+ to create it.
+            json.dump(self.settings,setJson)
+        setJson.close()
+
+        #Setup windows
         self.getWinds()
 
-        keyboard.on_press_key("p", lambda e: print("p pressed"))
+        #Hotkey Setup
+        self.hotkeyFuncs = {"Pause": self.pause, "Abort": self.abort}
+        self.hotkeyObjects = {
+            "Pause": Hotkey(self.settings["Hotkeys"]["Pause"], self.hotkeyFuncs["Pause"]),
+            "Abort": Hotkey(self.settings["Hotkeys"]["Abort"], self.hotkeyFuncs["Abort"])
+        }
 
         #Top Bar
-        self.topLabel = UnderlinedLabel(root, "wlock 0.0")
+        self.topLabel = UnderlinedLabel(root, TITLE)
        
         #Body
         self.body = ttk.Frame(root)
@@ -97,6 +199,7 @@ class Main:
         self.menubar = Menu(root)
         self.filemenu = Menu(self.menubar, tearoff=0)
 
+        #Add the different commands alongside their functions.
         self.filemenu.add_command(label="Refresh", command=self.getWinds)
         self.filemenu.add_command(label="Save", command=self.savePreset)
         self.filemenu.add_command(label="Load", command=self.loadPreset)
@@ -107,147 +210,178 @@ class Main:
 
         self.UISetup()
 
-    def settingsClosed(self):
+    def pause(self):
+        self.paused = not self.paused #Pause the force function.
+    
+    def abort(self):
+        self.aborted = True #Abort the force function.
+
+    def settingsClosed(self): #The callback for when the settings menu is closed.
         self.settingsActive = False
 
-    def settingsDisplay(self):
+    def changeSettings(self,n): #Function for toggling a setting.
+        for i in n:
+            if i == "Hotkeys": #We need to change the actual hotkeys, so we loop for it.
+                for x in n[i]:
+                    if n[i][x] != self.settings[i][x]: #Check if the hotkey has been changed.
+                        self.hotkeyObjects[x].disconnect() #If so, disconnect the previous hotkey object.
+                        self.hotkeyObjects[x] = Hotkey(n[i][x], self.hotkeyFuncs[x]) #And create a new one.
+
+            self.settings[i] = n[i] #Change the settings.
+
+        self.settingsMenu.closed() #Close the settings GUI.
+        setJson = open("settings.json", "w+")
+        json.dump(self.settings, setJson) #Update the settings JSON.
+        setJson.close()
+
+    def settingsDisplay(self): #Create the settings menu.
         if self.settingsActive == False:
             self.settingsMenu = SettingsMenu(self)
         self.settingsActive = not self.settingsActive
-        self.settingsMenu.Root.mainloop()
+        self.settingsMenu.root.mainloop()
 
-    def onClose(self):
+    def onClose(self): #Callback for when the main GUI is closed, so that we can close the other opened windows.
         try:
-            self.settingsMenu.Root.destroy()
+            self.settingsMenu.root.destroy()
         except:
             pass
         root.destroy()
 
-    def savePreset(self):
-        fp = filedialog.asksaveasfilename(filetypes={("Preset files", "*.wlpreset")})
-        fp = fp.replace(".wlpreset", "")
-        if fp:
-            save = open(fp + ".wlpreset","w+")
+    def savePreset(self): #Preset saving.
+        fp = filedialog.asksaveasfilename(filetypes={("Preset files", "*.wlpreset")}) #Ask the user for the name of the preset.
+        fp = fp.replace(".wlpreset", "") #Make sure there isn't a duplicate extension name in it.
+        if fp: #See if the user has actually decided to save it, since cancelling will return fp as None.
+            save = open(fp + ".wlpreset","w+") #Open the file, if it isn't there, create it.
             json.dump({
                 "Target": self.target, "Timer": float(self.timerEntry.get() or 10), "Whitelist": self.wtargt, "TimerSetting": self.timerOption.get()
-            },save)
+            },save) #Dump the information and close the file.
             save.close()
     
-    def loadPreset(self):
-        fp = filedialog.askopenfilename(filetypes={("Preset files", "*.wlpreset")})
-        save = open(fp,"r")
-        tab = json.load(save)
+    def loadPreset(self): #Preset loading.
+        fp = filedialog.askopenfilename(filetypes={("Preset files", "*.wlpreset")}) #Ask the user for the preset to load.
+        save = open(fp,"r") #Open the file.
+        tab = json.load(save) #Load the JSON information.
         
-        self.getWinds()
+        self.getWinds() #Refresh the windows so that nothing errors when we load the data.
 
-        self.timerEntry.delete(0, END)
+        self.timerEntry.delete(0, END) #Change the timer accordingly.
         self.timerEntry.insert(0, str(tab["Timer"]))
         self.timerOption.set(tab["TimerSetting"])
 
-        if self.wdict[tab["Target"]]:
-            n = tab["Target"]
+        if self.wdict[tab["Target"]]: #Check if the target in the preset is active.
+            n = tab["Target"] #If so, set the target.
             self.targLabel.configure(text="Target: " + n)
             self.target = n
         
-        for i in tab["Whitelist"]:
-            if self.wdict[i]:
+        for i in tab["Whitelist"]: #Loop through the whitelist.
+            if self.wdict[i]: #If the window is active on the device, add it to the whitelist.
                 self.AddItem(i)
 
-        save.close()
+        save.close() #Close the file.
     
-    def Force(self):
+    def Force(self): #Force function, the core of the program.
+        self.paused = False
+        self.aborted = False
         try:
-            pid = self.wdict[self.target]["PID"]
+            pid = self.wdict[self.target]["PID"] #Check if our target actually exists.
         except: 
-            messagebox.showerror(title="Error", message="You have not set a target!")
+            messagebox.showerror(title="Error", message="You have not set a target!") #If not, tell the user and return.
             return
-        try:
+        try: #Check if the timer exists.
             mode = self.timerOption.get()
-            timer = float(self.timerEntry.get())
+            timer = float(self.timerEntry.get()) #If so, set the amount of time to wait for accordingly.
             if mode == "Minutes": timer *= 60 
             elif mode == "Hours": timer *= 360
         except:
-            messagebox.showerror(title="Error", message="The timer entry is not a valid number!")
+            messagebox.showerror(title="Error", message="The timer entry is not a valid number!") #If not, tell the user and return.
             return
 
-        st = time.time()
+        st = time.time() #Get the current time for comparison.
         try: 
-            app = Application().connect(process=pid) 
+            app = Application().connect(process=pid) #See if our target is active on the user's device.
         except: 
-            messagebox.showerror(title="Alert", message="Application not found, try refreshing the available windows under 'File'.")
+            messagebox.showerror(title="Alert", message="Application not found, try refreshing the available windows under 'File'.") #If not, tell the user and return.
             return
-        app.top_window().set_focus()
-        root.title("Focusing..")
+        app.top_window().set_focus() #Set the target to be on top.
+        root.title("Focusing..") #Change the GUI's name.
 
-        while True:
-            try:
-                hwnd = win32gui.GetForegroundWindow()
-                hn = win32gui.GetWindowText(hwnd)
-                
-                _, npid = win32process.GetWindowThreadProcessId(hwnd)
-                fullname = self.getFullName(npid)
-                name = self.getName(fullname)
+        while True: #Loop.
+            if self.aborted == True: break
+            if self.paused == True:
+                time.sleep(0.1) #Wait
+                st += 0.1 #Also increase the original time so the timer continues for the correct amount once resumed.
+            else:
+                try:
+                    hwnd = win32gui.GetForegroundWindow() #Get the current active window.
+                    hn = win32gui.GetWindowText(hwnd) #Get the name of it.
+                    
+                    _, npid = win32process.GetWindowThreadProcessId(hwnd)
+                    fullname = self.getFullName(npid)
+                    name = self.getName(fullname) #Get the proper name of the current active window.
 
-                if hn and (not name == "Windows Explorer"):
-                    if npid != pid:
-                        if not npid in self.wpids:
-                            app.top_window().set_focus()
-                time.sleep(0.1)
-                if time.time() - st > timer:
+                    if hn and (not name == "Windows Explorer"): #See if it exists & if it's not windows explorer.
+                        if npid != pid: #If it doesn't match the target's pid, check if it's in the whitelist.
+                            if not npid in self.wpids:
+                                app.top_window().set_focus() #If it isn't in the whitelist, set the main target to be active.
+                    time.sleep(0.1) #Wait.
+                except Exception as e: #In case anything errors.
+                    print(e)
+                    break #If something errors, break the loop early.
+                if time.time() - st > timer: #When the specified amount of time has passed, break the loop.
                     break
-            except Exception as e:
-                time.sleep(0.1)
-                pass
-        messagebox.showinfo(title="Alert", message="Focus timer complete.")
+        #Display a message after the timer is done.
+        if self.aborted == True:
+            messagebox.showinfo(title="Alert", message="Timer aborted.")
+        else: messagebox.showinfo(title="Alert", message="Focus timer complete.")
         root.title(TITLE)
 
-    def CBoxSelected(self,n):
-        print("Selected: " + self.cBox.get())
+    def CBoxSelected(self,n): #Function for when the main combobox is selected.
+        if self.settings["AddToWhitelistOnSelect"] == True: self.AddItem(self.cBox.get())
 
-    def SetTarget(self):
+    def SetTarget(self): #Function for setting the target.
         procname = self.cBox.get()
-        if procname != INITIAL_CBOX_TEXT:
+        if procname != INITIAL_CBOX_TEXT: #See if there is actual content in the combobox. If so, assign values.
             self.target = procname
             self.targLabel.configure(text="Target: " + procname)
         
-    def AddItem(self, opt):
+    def AddItem(self, opt): #Function for adding an item to the whitelist.
         procname = opt or self.cBox.get()
-        if procname != INITIAL_CBOX_TEXT and not procname in self.wtargt:
+        if procname != INITIAL_CBOX_TEXT and not procname in self.wtargt: #Check if the item is not the default value and is not in the whitelist.
             self.sTBox.config(state="normal")
-            self.sTBox.insert(END, procname+"\n")
+            self.sTBox.insert(END, procname+"\n") #Add the item to the textbox.
             self.sTBox.config(state="disabled")
 
-            self.wpids.append(self.wdict[procname]["PID"])
+            self.wpids.append(self.wdict[procname]["PID"]) #Add the item to the whitelist lists.
             self.wtargt.append(procname)
 
-    def RemItem(self):
+    def RemItem(self): #Function for removing items from the whitelist.
         procname = self.cBox.get()
         self.sTBox.config(state="normal")
-        self.sTBox.delete("1.0", END)
+        self.sTBox.delete("1.0", END) #Clear the whitelist textbox.
         i = 0
-        for v in self.wtargt.copy():
-            if procname == v:
+        for v in self.wtargt.copy(): #Loop through a copy of the whitelist to avoid errors.
+            if procname == v: #If it is the removed item, delete it from the whitelist.
                 del self.wtargt[i]
-            else:
+            else: #If not, add it to the textbox.
                 self.sTBox.insert(END, v+"\n")
             i += 1
 
         i2 = 0
-        for i in self.wpids:
+        for i in self.wpids: #Update the whitelisted pids.
             if i == self.wdict[procname]["PID"]:
                 del self.wpids[i2]
             i2 += 1
 
         self.sTBox.config(state="disabled")
 
-    def ClearItems(self):
+    def ClearItems(self): #Function for clearing the whitelist.
         self.sTBox.config(state="normal")
-        self.wtargt.clear()
+        self.wtargt.clear() #Clear both tables.
         self.wpids.clear()
-        self.sTBox.delete("1.0", END)
+        self.sTBox.delete("1.0", END) #Remove all text in whitelist textbox.
         self.sTBox.config(state="disabled")
 
-    def UISetup(self):
+    def UISetup(self): #UI setup.
         #Place UI Objects
         self.topLabel.place(relwidth=1, relheight=0.06, relx=0.5, rely=0, anchor="n")
 
@@ -273,19 +407,19 @@ class Main:
 
         self.forceButton.place(relwidth=0.32, relheight=0.08, relx=0.5, rely=0.98, anchor="s")
 
-    def getFullName(self,pid):
+    def getFullName(self,pid): #Function for getting the full path of a process.
         try:
             for p in c.query('SELECT ExecutablePath FROM Win32_Process WHERE ProcessId = %s' % str(pid)): #Query for a PID match.
                 return p.ExecutablePath #Return the full path.
-        except:
+        except: #If it errors, just return nothing.
             return None
 
-    def getName(self,fn):
+    def getName(self,fn): #Function for getting the file description of a process, which is its display name.
         try:
             language, codepage = win32api.GetFileVersionInfo(fn, '\\VarFileInfo\\Translation')[0]
             stringFileInfo = u'\\StringFileInfo\\%04X%04X\\%s' % (language, codepage, "FileDescription")
             return win32api.GetFileVersionInfo(fn, stringFileInfo)
-        except:
+        except: #If it errors, just return nothing.
             return None
     
     def EnumWindows(self,hwnd,ctx):
@@ -295,9 +429,9 @@ class Main:
                 _, pid = win32process.GetWindowThreadProcessId(hwnd)
 
                 fullname = self.getFullName(pid)
-                name = self.getName(fullname)
+                name = self.getName(fullname) #Using the full name, get the display name of the window.
 
-                if name and len(name) > 0:
+                if name and len(name) > 0: #Check if the name of the window is valid.
                     self.wlist.append(name)
                     self.wdict[name] = {"PID": pid} #If so, append it into the list of all active windows.
 
@@ -316,8 +450,8 @@ class Main:
         return self.wlist
         
 
-m = Main()
+m = Main() #Create the root window of the GUI.
 
-root.configure(menu=m.menubar)
-root.protocol("WM_DELETE_WINDOW", m.onClose)
-root.mainloop()
+root.configure(menu=m.menubar) #Assign the menu of the GUI to the root.
+root.protocol("WM_DELETE_WINDOW", m.onClose) #Assign a callback for when the window is closed.
+root.mainloop() #Call mainloop.
