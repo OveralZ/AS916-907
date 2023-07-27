@@ -23,6 +23,6 @@ This option will open a new window, and you can adjust your settings there.
 Make sure to press "Apply" to save these settings.
 These settings save between usages of this program.
 
-## [Hotkeys]
+## Hotkeys
 In the settings GUI, you will also see a list of hotkeys.
 Press the buttons assigned to the hotkeys to assign them to another button of your choice.
